@@ -35,8 +35,8 @@ Using this awesome repo [cluster-monitoring](https://github.com/carlosedp/cluste
 
 ---
 ## Services
-- [x] nginx
-- [x] rancher demo
+- [x] ~~nginx~~
+- [x] ~~rancher demo~~
 - [x] longhorn
 
 ---
