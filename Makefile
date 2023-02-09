@@ -9,4 +9,4 @@ validate: ## Validate files with pre-commit hooks
 	@pre-commit run --all-files
 
 lh-upgrade: ## upgrade longhorn helm chart
-	@helm upgrade longhorn longhorn/longhorn --values longhorn/values.yaml
+	@helm upgrade longhorn longhorn --values longhorn/values.yaml

@@ -1,8 +1,9 @@
 # https://github.com/longhorn/charts/blob/master/charts/longhorn/values.yaml
 
-longhornUI:
-  replicas: 1
+longhorn:
+  longhornUI:
+    replicas: 1
 
-ingress:
-  enabled: true
-  host: longhorn.local
+  ingress:
+    enabled: true
+    host: longhorn.local
