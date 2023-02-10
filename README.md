@@ -37,6 +37,11 @@ Using this awesome repo [cluster-monitoring](https://github.com/carlosedp/cluste
 ## Services
 - [x] ~~nginx~~
 - [x] ~~rancher demo~~
-- [x] longhorn
-
----
+- [x] [Longhorn](https://longhorn.io/) - Distributed block storage
+- [x] [Pi Hole](https://pi-hole.net/) - Network Adblocking
+- [ ] [Cert Manager](https://cert-manager.io/docs/installation/) - SSL
+- [ ] [Tailscale](https://tailscale.com/) - VPN
+- [ ] [Media server](https://www.reddit.com/r/kubernetes/comments/rtiexk/k8smediaserveroperator_your_allinone_resource_for/)
+  - [ ] [Plex](https://www.plex.tv/)
+  - [ ] [Sonarr](https://sonarr.tv/)
+  - [ ] [Jackett](https://github.com/Jackett/Jackett)
