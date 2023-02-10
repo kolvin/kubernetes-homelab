@@ -6,4 +6,4 @@ longhorn:
 
   ingress:
     enabled: true
-    host: longhorn.local
+    host: longhorn.kolv.in
