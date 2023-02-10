@@ -1,0 +1,41 @@
+# https://github.com/MoJo2600/pihole-kubernetes/blob/master/charts/pihole/values.yaml
+pihole:
+  persistentVolumeClaim:
+    enabled: true
+    storageClass: longhorn
+  virtualHost: pihole.kolv.in
+  ingress:
+    enabled: true
+    ingressClassName: traefik
+    hosts:
+      - pihole.kolv.in
+  serviceWeb:
+    loadBalancerIP: 10.19.1.103
+    type: LoadBalancer
+    http:
+      port: 8080
+    https:
+      port: 8443
+  serviceDns:
+    loadBalancerIP: 10.19.1.103
+    type: LoadBalancer
+  serviceDhcp:
+    enabled: false
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  admin:
+    existingSecret: "pihole-secret"
+    passwordKey: "password"
+  extraEnvVars:
+    TZ: UTC
+  dnsmasq:
+    customDnsEntries:
+      - address=/pihole.kolv.in/10.19.1.103
+      - address=/longhorn.kolv.in/10.19.1.103
+      - address=/grafana.kolv.in/10.19.1.103
+      - address=/prometheus.kolv.in/10.19.1.103
