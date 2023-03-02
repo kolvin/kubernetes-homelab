@@ -1,0 +1,8 @@
+# Config -> https://metallb.universe.tf/configuration/
+reservedIps:
+  - 10.19.1.210-10.19.1.255
+
+# https://github.com/metallb/metallb/blob/main/charts/metallb/values.yaml
+metallb:
+  rbac:
+    create: true

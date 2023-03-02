@@ -1,0 +1,8 @@
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: home-advert
+  namespace: metallb-system
+spec:
+  ipAddressPools:
+  - home-pool
