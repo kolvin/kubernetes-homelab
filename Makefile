@@ -8,5 +8,6 @@ install: ## Setup commit hooks
 validate: ## Validate files with pre-commit hooks
 	@pre-commit run --all-files
 
-lh-upgrade: ## upgrade longhorn helm chart
-	@helm upgrade longhorn longhorn --values longhorn/values.yaml
+update-metallb: ## Prepare and install metallb
+	@helm dependency build metallb
+	@helm upgrade --install metallb metallb --values metallb/values.yaml --namespace metallb-system --create-namespace --wait
