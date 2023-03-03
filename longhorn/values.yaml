@@ -4,6 +4,6 @@ longhorn:
   longhornUI:
     replicas: 1
 
-  ingress:
-    enabled: true
-    host: longhorn.kolv.in
+  service:
+    ui:
+      type: LoadBalancer
