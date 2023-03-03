@@ -11,3 +11,7 @@ validate: ## Validate files with pre-commit hooks
 update-metallb: ## Prepare and install metallb
 	@helm dependency build metallb
 	@helm upgrade --install metallb metallb --values metallb/values.yaml --namespace metallb-system --create-namespace --wait
+
+update-longhorn: ## Prepare and install longhorn
+	@helm dependency build longhorn
+	@helm upgrade --install longhorn longhorn --values longhorn/values.yaml --namespace longhorn-system --create-namespace --wait
