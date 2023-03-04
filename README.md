@@ -5,6 +5,9 @@
 - [kubernetes-homelab](#kubernetes-homelab)
   - [Hardware](#hardware)
   - [Environment](#environment)
+  - [Networking](#networking)
+    - [High Level](#high-level)
+    - [Adblocking](#adblocking)
   - [Monitoring](#monitoring)
   - [Services](#services)
 
@@ -24,19 +27,29 @@
 ## Environment
 - Debian GNU/Linux 11 (bullseye) via [ripimager](https://github.com/raspberrypi/rpi-imager)
 - Kubernetes via [k3s](https://k3s.io/)
-  - w/ [Traefik Ingress Controller](https://docs.k3s.io/networking#traefik-ingress-controller)
-  - w/ [Service Load Balancer](https://docs.k3s.io/networking#service-load-balancer)
+
+---
+
+## Networking
+
+### High Level
+![](./.docs/networking.jpg)
+
+
+### Adblocking
+![](./.docs/adblocking.jpg)
 
 ---
 
 ## Monitoring
 
-Using this awesome repo [cluster-monitoring](https://github.com/carlosedp/cluster-monitoring) for of the shelf Raspberry PI(ARM) monitoring
+@TODO
 
 ---
 ## Services
 - [x] ~~nginx~~
 - [x] ~~rancher demo~~
+- [x] [MetalLB](https://metallb.universe.tf/) - Network Load Balancer
 - [x] [Longhorn](https://longhorn.io/) - Distributed block storage
 - [x] [Pi Hole](https://pi-hole.net/) - Network Adblocking
 - [ ] [Cert Manager](https://cert-manager.io/docs/installation/) - SSL
