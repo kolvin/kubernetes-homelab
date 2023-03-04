@@ -15,3 +15,7 @@ update-metallb: ## Prepare and install metallb
 update-longhorn: ## Prepare and install longhorn
 	@helm dependency build longhorn
 	@helm upgrade --install longhorn longhorn --values longhorn/values.yaml --namespace longhorn-system --create-namespace --wait
+
+update-pihole: ## Prepare and install pihole
+	@helm dependency build pihole
+	@helm upgrade --install pihole pihole --values pihole/values.yaml --namespace pihole --create-namespace --wait

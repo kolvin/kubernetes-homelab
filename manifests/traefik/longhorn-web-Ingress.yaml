@@ -1,0 +1,37 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: longhorn-ui-ingressroute
+  namespace: longhorn-system
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`pleiades.kolv.in`) && PathPrefix(`/longhorn`)
+      kind: Rule
+      services:
+        - name: longhorn-frontend
+          port: http
+      middlewares:
+        - name: longhorn-add-trailing-slash
+        - name: longhorn-stripprefix
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: longhorn-add-trailing-slash
+  namespace: longhorn-system
+spec:
+  redirectRegex:
+    regex: ^.*/longhorn$
+    replacement: /longhorn/
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: longhorn-stripprefix
+  namespace: longhorn-system
+spec:
+  stripPrefix:
+    prefixes:
+      - /longhorn

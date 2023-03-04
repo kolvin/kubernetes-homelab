@@ -2,32 +2,20 @@
 pihole:
   persistentVolumeClaim:
     enabled: true
-    storageClass: longhorn
+    existingClaim: "pihole-pvc"
   virtualHost: pihole.kolv.in
-  ingress:
-    enabled: true
-    ingressClassName: traefik
-    hosts:
-      - pihole.kolv.in
   serviceWeb:
-    loadBalancerIP: 10.19.1.103
     type: LoadBalancer
-    http:
-      port: 8080
-    https:
-      port: 8443
+    annotations:
+      metallb.universe.tf/allow-shared-ip: pihole-svc
+      metallb.universe.tf/load-balancer-ips: "10.19.1.211"
   serviceDns:
-    loadBalancerIP: 10.19.1.103
     type: LoadBalancer
+    annotations:
+      metallb.universe.tf/allow-shared-ip: pihole-svc
+      metallb.universe.tf/load-balancer-ips: "10.19.1.211"
   serviceDhcp:
     enabled: false
-  resources:
-    limits:
-      cpu: 200m
-      memory: 256Mi
-    requests:
-      cpu: 100m
-      memory: 128Mi
   admin:
     existingSecret: "pihole-secret"
     passwordKey: "password"
@@ -35,7 +23,5 @@ pihole:
     TZ: UTC
   dnsmasq:
     customDnsEntries:
-      - address=/pihole.kolv.in/10.19.1.103
-      - address=/longhorn.kolv.in/10.19.1.103
-      - address=/grafana.kolv.in/10.19.1.103
-      - address=/prometheus.kolv.in/10.19.1.103
+      - address=/pleiades.kolv.in/10.19.1.210
+      - address=/pihole.kolv.in/10.19.1.211
