@@ -9,6 +9,7 @@
     - [High Level](#high-level)
     - [Adblocking](#adblocking)
   - [Monitoring](#monitoring)
+  - [Repo Structure](#repo-structure)
   - [Services](#services)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -46,12 +47,20 @@
 @TODO
 
 ---
+
+## Repo Structure
+
+- [./charts](./charts/) templated manifests via [helm](https://helm.sh/)
+- [./manifests](./manifests/) manifests
+
+---
 ## Services
 - [x] ~~nginx~~
 - [x] ~~rancher demo~~
 - [x] [MetalLB](https://metallb.universe.tf/) - Network Load Balancer
 - [x] [Longhorn](https://longhorn.io/) - Distributed block storage
 - [x] [Pi Hole](https://pi-hole.net/) - Network Adblocking
+- [ ] [Ansible](https://docs.ansible.com/ansible/latest/getting_started/index.html) - Host automation
 - [ ] [Cert Manager](https://cert-manager.io/docs/installation/) - SSL
 - [ ] [Tailscale](https://tailscale.com/) - VPN
 - [ ] [Media server](https://www.reddit.com/r/kubernetes/comments/rtiexk/k8smediaserveroperator_your_allinone_resource_for/)
