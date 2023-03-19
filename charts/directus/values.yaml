@@ -72,6 +72,21 @@ directusEnvVars:
     value: "6aeb8a0c-fdd5-4356-b5a8-c61fa83fc0ac"
   - name: SECRET
     value: "4c28b02f-6c4c-4e8d-a40f-fa5a25f3d691"
+  - name: DB_CLIENT
+    value: "postgres"
+  - name: DB_HOST
+    value: "10.19.1.212"
+  - name: DB_PORT
+    value: "5432"
+  - name: DB_DATABASE
+    value: "directus"
+  - name: DB_USER
+    value: "directus"
+  - name: DB_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: directus-postgresql
+        key: password
 
 # HPA
 autoscaling:
@@ -88,11 +103,21 @@ postgresql:
   image:
     repository: bitnami/postgresql
     tag: "14.7.0"
-  persistence:
-    storageClass: longhorn-fast
-    size: 200Mi
   architecture: standalone
+  primary:
+    service:
+      type: LoadBalancer
+      loadBalancerIp: "10.19.1.212"
+      loadBalancerSourceRanges:
+        - "10.19.1.0/24"
+    persistence:
+      storageClass: longhorn-fast
+      size: 8Gi
+    livenessProbe:
+      initialDelaySeconds: 200
+    readinessProbe:
+      initialDelaySeconds: 200
   auth:
-    postgresPassword: "d1r3ctu5"
-    username: directus
     database: directus
+    username: directus
+    existingSecret: "directus-postgresql"
