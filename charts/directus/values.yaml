@@ -1,0 +1,98 @@
+replicaCount: 1
+
+# https://hub.docker.com/r/directus/directus/tags
+image:
+  repository: directus/directus
+  pullPolicy: IfNotPresent
+  tag: "9.23"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+resources:
+  {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+
+podAnnotations: 
+  {}
+
+podSecurityContext:
+  {}
+  # fsGroup: 2000
+
+securityContext:
+  {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 8055
+
+ingress:
+  enabled: false
+
+ingressroute:
+  enabled: true
+  hosts:
+    - host: cms.pleiades.kolv.in
+      path: /
+
+#  kubectl run directus --image=directus/directus --env="ADMIN_EMAIL=taylorcalvin07@gmail.com" --env="ADMIN_PASSWORD=d1r3ctu5" --env="KEY=6aeb8a0c-fdd5-4356-b5a8-c61fa83fc0ac" --env="SECRET=4c28b02f-6c4c-4e8d-a40f-fa5a25f3d691" --port=8055
+directusEnvVars:
+  - name: ADMIN_EMAIL
+    value: "taylorcalvin07@gmail.com"
+  - name: ADMIN_PASSWORD
+    value: "d1r3ctu5"
+  - name: KEY
+    value: "6aeb8a0c-fdd5-4356-b5a8-c61fa83fc0ac"
+  - name: SECRET
+    value: "4c28b02f-6c4c-4e8d-a40f-fa5a25f3d691"
+
+# HPA
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+# Service DB
+# https://github.com/bitnami/charts/blob/main/bitnami/postgresql/values.yaml
+postgresql:
+  enabled: true
+  image:
+    repository: bitnami/postgresql
+    tag: "14.7.0"
+  persistence:
+    storageClass: longhorn-fast
+    size: 200Mi
+  architecture: standalone
+  auth:
+    postgresPassword: "d1r3ctu5"
+    username: directus
+    database: directus
