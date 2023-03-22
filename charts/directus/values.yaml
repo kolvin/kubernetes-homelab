@@ -11,43 +11,17 @@ nameOverride: ""
 fullnameOverride: ""
 
 serviceAccount:
-  # Specifies whether a service account should be created
   create: true
-  # Annotations to add to the service account
   annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
   name: ""
 
-resources:
-  {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
+resources: {}
 
+podAnnotations: {}
 
-podAnnotations: 
-  {}
+podSecurityContext: {}
 
-podSecurityContext:
-  {}
-  # fsGroup: 2000
-
-securityContext:
-  {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
+securityContext: {}
 
 service:
   type: ClusterIP
@@ -62,7 +36,6 @@ ingressroute:
     - host: cms.pleiades.kolv.in
       path: /
 
-#  kubectl run directus --image=directus/directus --env="ADMIN_EMAIL=taylorcalvin07@gmail.com" --env="ADMIN_PASSWORD=d1r3ctu5" --env="KEY=6aeb8a0c-fdd5-4356-b5a8-c61fa83fc0ac" --env="SECRET=4c28b02f-6c4c-4e8d-a40f-fa5a25f3d691" --port=8055
 directusEnvVars:
   - name: ADMIN_EMAIL
     value: "taylorcalvin07@gmail.com"
@@ -82,10 +55,23 @@ directusEnvVars:
     value: "directus"
   - name: DB_USER
     value: "directus"
-  - name: DB_PASSWORD
+  - name: DB_PASSWORD 
     valueFrom:
       secretKeyRef:
         name: directus-postgresql
+        key: password
+  - name: CACHE_ENABLED
+    value: "true"
+  - name: CACHE_TTL
+    value: "5m"
+  - name: CACHE_STORE
+    value: "redis"
+  - name: CACHE_REDIS_HOST
+    value: "10.19.1.213"
+  - name: CACHE_REDIS_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: directus-redis
         key: password
 
 # HPA
@@ -97,11 +83,11 @@ autoscaling:
   targetMemoryUtilizationPercentage: 80
 
 # Service DB
+# https://docs.directus.io/self-hosted/config-options.html#database
 # https://github.com/bitnami/charts/blob/main/bitnami/postgresql/values.yaml
 postgresql:
   enabled: true
   image:
-    repository: bitnami/postgresql
     tag: "14.7.0"
   architecture: standalone
   primary:
@@ -113,11 +99,30 @@ postgresql:
     persistence:
       storageClass: longhorn-fast
       size: 8Gi
-    livenessProbe:
-      initialDelaySeconds: 200
-    readinessProbe:
-      initialDelaySeconds: 200
   auth:
     database: directus
     username: directus
     existingSecret: "directus-postgresql"
+
+# Service Cache
+# https://docs.directus.io/self-hosted/config-options.html#cache
+# https://github.com/bitnami/charts/blob/main/bitnami/redis/values.yaml
+redis:
+  enabled: true
+  architecture: standalone
+  image:
+    tag: "6.2"
+  master:
+    service:
+      type: LoadBalancer
+      loadBalancerIp: "10.19.1.213"
+      loadBalancerSourceRanges:
+        - "10.19.1.0/24"
+    persistence:
+      enabled: true
+      storageClass: longhorn-fast
+      size: 8Gi
+  auth:
+    enabled: true
+    existingSecret: "directus-redis"
+    existingSecretPasswordKey: "password"

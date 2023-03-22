@@ -10,7 +10,7 @@ dependencies:
   version: "12.2.0"
   repository: https://charts.bitnami.com/bitnami
   condition: postgresql.enabled
-# - name: redis
-#   version: "17.8.4"
-#   repository: "https://charts.bitnami.com/bitnami"
-#   condition: redis.enabled
+- name: redis
+  version: "17.8.5"
+  repository: "https://charts.bitnami.com/bitnami"
+  condition: redis.enabled

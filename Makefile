@@ -8,14 +8,13 @@ install: ## Setup commit hooks
 validate: ## Validate files with pre-commit hooks
 	@pre-commit run --all-files
 
-update-metallb: ## Prepare and install metallb
-	@helm dependency build metallb
-	@helm upgrade --install metallb metallb --values metallb/values.yaml --namespace metallb-system --create-namespace --wait
+update-helm-deps:
+	@helm dependency update charts/$(chart)
 
-update-longhorn: ## Prepare and install longhorn
-	@helm dependency build longhorn
-	@helm upgrade --install longhorn longhorn --values longhorn/values.yaml --namespace longhorn-system --create-namespace --wait
+helm-update: ## Prepare and install a $chart
+	@helm dependency build charts/$(chart)
+	@helm upgrade --install --atomic $(chart) charts/$(chart) --values charts/$(chart)/values.yaml --namespace $(namespace) --create-namespace
 
-update-pihole: ## Prepare and install pihole
-	@helm dependency build pihole
-	@helm upgrade --install pihole pihole --values pihole/values.yaml --namespace pihole --create-namespace --wait
+# Usage:
+# make chart=directus namespace=apps helm-update
+# make chart=longhorn namespace=longhorn-system helm-update
