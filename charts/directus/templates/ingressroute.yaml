@@ -1,0 +1,25 @@
+{{- if .Values.ingressroute.enabled -}}
+{{- $fullName := include "directus.fullname" . -}}
+{{- $svcPort := .Values.service.port -}}
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ $fullName }}-ingressroute
+  labels:
+    {{- include "directus.labels" . | nindent 4 }}
+  {{- with .Values.ingressroute.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  entryPoints:
+    - web
+  routes:
+    {{- range .Values.ingressroute.hosts }}
+    - match: Host(`{{ .host }}`) && PathPrefix(`{{ .path }}`)
+      kind: Rule
+      services:
+        - name: {{ $fullName }}
+          port: {{ $svcPort }}
+    {{- end }}
+{{- end }}

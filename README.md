@@ -52,6 +52,7 @@
 
 - [./charts](./charts/) templated manifests via [helm](https://helm.sh/)
 - [./manifests](./manifests/) manifests
+- [./makefile](./Makefile) build commands
 
 ---
 ## Services
@@ -60,6 +61,8 @@
 - [x] [MetalLB](https://metallb.universe.tf/) - Network Load Balancer
 - [x] [Longhorn](https://longhorn.io/) - Distributed block storage
 - [x] [Pi Hole](https://pi-hole.net/) - Network Adblocking
+- [x] [Directus](https://docs.directus.io/getting-started/introduction.html) - CMS
+- [ ] [Cloudflare Tunnels]() - Tunnel services to public internet
 - [ ] [Ansible](https://docs.ansible.com/ansible/latest/getting_started/index.html) - Host automation
 - [ ] [Cert Manager](https://cert-manager.io/docs/installation/) - SSL
 - [ ] [Tailscale](https://tailscale.com/) - VPN
