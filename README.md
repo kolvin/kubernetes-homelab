@@ -62,7 +62,7 @@
 - [x] [Longhorn](https://longhorn.io/) - Distributed block storage
 - [x] [Pi Hole](https://pi-hole.net/) - Network Adblocking
 - [x] [Directus](https://docs.directus.io/getting-started/introduction.html) - CMS
-- [ ] [Cloudflare Tunnels]() - Tunnel services to public internet
+- [x] [Cloudflare Tunnels](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/) - Tunnel services to public internet
 - [ ] [Ansible](https://docs.ansible.com/ansible/latest/getting_started/index.html) - Host automation
 - [ ] [Cert Manager](https://cert-manager.io/docs/installation/) - SSL
 - [ ] [Tailscale](https://tailscale.com/) - VPN
