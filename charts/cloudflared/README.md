@@ -24,7 +24,7 @@ kubectl create secret generic tunnel-credentials \
 --from-file=credentials.json=/Users/<uname>/.cloudflared/<tunnel ID>.json
 ```
 
-Supply the secret via `values.config.existingSecret`
+Supply the secret via `values.config.tunnelCredsExistingSecret`
 
 ---
 
