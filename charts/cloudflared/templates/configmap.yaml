@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "cloudflared.fullname" . }}
+  labels:
+    {{- include "cloudflared.labels" . | nindent 4 }}
+data:
+  config.yaml: |-
+    tunnel: {{ .Values.config.tunnel }}
+    credentials-file: {{ .Values.config.credentialFilePath }}
+    metrics: 0.0.0.0:{{ .Values.config.metrics.servicePort }}
+    metrics-update-freq: {{ .Values.config.metrics.updateFrequency }}
+    no-autoupdate: {{ .Values.config.disableAutoUpdate }}
+    ingress:
+    {{- range $key, $values := .Values.config.ingress }}
+    - hostname: {{ $values.hostname }}
+      service: http://{{ $values.serviceName }}:{{ $values.servicePort }}
+    {{- end }}
+    - service: http_status:404

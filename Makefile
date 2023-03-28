@@ -15,6 +15,11 @@ helm-update: ## Prepare and install a $chart
 	@helm dependency build charts/$(chart)
 	@helm upgrade --install --atomic $(chart) charts/$(chart) --values charts/$(chart)/values.yaml --namespace $(namespace) --create-namespace
 
+helm-template: ## Prepare and install a $chart
+	@helm dependency build charts/$(chart)
+	@helm template $(chart) charts/$(chart) --values charts/$(chart)/values.yaml --namespace $(namespace) --create-namespace
+
 # Usage:
 # make chart=directus namespace=apps helm-update
 # make chart=longhorn namespace=longhorn-system helm-update
+# make chart=cloudflared namespace=apps helm-template

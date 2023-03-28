@@ -1,0 +1,10 @@
+apiVersion: v2
+name: cloudflared
+description: A Helm chart for deploying cloudflared to kubernetes
+type: application
+version: 0.1.0
+sources:
+  - https://developers.cloudflare.com/cloudflare-one/tutorials/many-cfd-one-tunnel
+keywords:
+  - cluster
+  - traffic
