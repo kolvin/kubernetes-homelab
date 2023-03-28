@@ -56,7 +56,7 @@ spec:
       volumes:
       - name: creds
         secret:
-          secretName: {{ .Values.config.existingSecret }}
+          secretName: {{ .Values.config.tunnelCredsExistingSecret }}
       - name: config
         configMap:
           name: {{ include "cloudflared.fullname" . }}

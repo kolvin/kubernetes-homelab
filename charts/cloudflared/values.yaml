@@ -6,7 +6,7 @@ replicaCount: 2
 
 config:
   tunnel: my-tunnel
-  existingSecret: tunnel-credentials
+  tunnelCredsExistingSecret: tunnel-credentials
   credentialFilePath: /etc/cloudflared/creds/credentials.json
   disableAutoUpdate: true
   ingress: # https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/configuration/ingress
@@ -28,8 +28,8 @@ fullnameOverride: ""
 
 resources:
   limits:
-    cpu: 100m
-    memory: 128Mi
+    cpu: 200m
+    memory: 256Mi
   requests:
     cpu: 100m
     memory: 128Mi
