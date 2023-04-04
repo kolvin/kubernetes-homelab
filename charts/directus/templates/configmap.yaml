@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "directus.fullname" . }}-application-config
+  labels:
+    {{- include "directus.labels" . | nindent 4 }}
+data:
+  config.yaml: |
+    # Application
+    PUBLIC_URL: {{ .Values.config.application.public_url | quote }}
+    KEY: {{ .Values.config.application.key }}
+    SECRET: {{ .Values.config.application.secret }}
+    LOG_LEVEL: {{ .Values.config.application.log_level }}
+    # Authentication
+    AUTH_PROVIDERS: {{ include "directus.authProviders" . | quote }}
+    AUTH_DISABLE_DEFAULT: {{ ternary false true (.Values.config.auth.admin.enabled) }}
+    {{- if .Values.config.auth.sso.discord.enabled }}
+    AUTH_DISCORD_DRIVER: "oauth2"
+    AUTH_DISCORD_AUTHORIZE_URL: {{ .Values.config.auth.sso.discord.auth_url | quote }}
+    AUTH_DISCORD_ACCESS_URL: {{ .Values.config.auth.sso.discord.access_url | quote }}
+    AUTH_DISCORD_PROFILE_URL: {{ .Values.config.auth.sso.discord.profile_url | quote }}
+    AUTH_DISCORD_SCOPE: "identify email"
+    AUTH_DISCORD_IDENTIFIER_KEY: "id"
+    AUTH_DISCORD_EMAIL_KEY: "email"
+    AUTH_DISCORD_FIRST_NAME_KEY: "username"
+    AUTH_DISCORD_ALLOW_PUBLIC_REGISTRATION: {{ .Values.config.auth.sso.discord.allow_public_registrations }} 
+    AUTH_DISCORD_ICON: "discord"
+    AUTH_DISCORD_DEFAULT_ROLE_ID: {{ .Values.config.auth.sso.discord.default_role_id | quote }}
+    {{- end }}
+    {{- if .Values.config.auth.sso.github.enabled }}
+    AUTH_GITHUB_DRIVER: "oauth2"
+    AUTH_GITHUB_AUTHORIZE_URL: {{ .Values.config.auth.sso.github.auth_url | quote }}
+    AUTH_GITHUB_ACCESS_URL: {{ .Values.config.auth.sso.github.access_url | quote }}
+    AUTH_GITHUB_PROFILE_URL: {{ .Values.config.auth.sso.github.profile_url | quote }}
+    AUTH_GITHUB_SCOPE: "email identify"
+    AUTH_GITHUB_ALLOW_PUBLIC_REGISTRATION: {{ .Values.config.auth.sso.github.allow_public_registrations }} 
+    AUTH_GITHUB_ICON: "github"
+    AUTH_GITHUB_DEFAULT_ROLE_ID: {{ .Values.config.auth.sso.github.default_role_id | quote }} 
+    {{- end }}
+    {{- if .Values.config.auth.admin.enabled }}
+    AUTH_LOCAL_DRIVER: "local"
+    {{- end }}
+    # Datastore
+    DB_CLIENT: {{ .Values.config.datastore.client }}
+    DB_HOST: {{ .Values.config.datastore.host }}
+    DB_PORT: {{ .Values.config.datastore.port }}
+    DB_DATABASE: {{ .Values.config.datastore.database }}
+    DB_USER: {{ .Values.config.datastore.user }} 
+    # Cache
+    CACHE_ENABLED: true
+    CACHE_TTL: {{ .Values.config.cache.ttl }}
+    CACHE_STORE: {{ .Values.config.cache.client }}
+    CACHE_REDIS_HOST: {{ .Values.config.cache.host }}

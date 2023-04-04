@@ -4,23 +4,15 @@ replicaCount: 1
 image:
   repository: directus/directus
   pullPolicy: IfNotPresent
-  tag: "9.23"
+  tag: "9.23.4"
 
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
-serviceAccount:
-  create: true
-  annotations: {}
-  name: ""
-
 resources: {}
-
 podAnnotations: {}
-
 podSecurityContext: {}
-
 securityContext: {}
 
 service:
@@ -36,44 +28,6 @@ ingressroute:
     - host: cms.pleiades.kolv.in
       path: /
 
-directusEnvVars:
-  - name: ADMIN_EMAIL
-    value: "taylorcalvin07@gmail.com"
-  - name: ADMIN_PASSWORD
-    value: "d1r3ctu5"
-  - name: KEY
-    value: "6aeb8a0c-fdd5-4356-b5a8-c61fa83fc0ac"
-  - name: SECRET
-    value: "4c28b02f-6c4c-4e8d-a40f-fa5a25f3d691"
-  - name: DB_CLIENT
-    value: "postgres"
-  - name: DB_HOST
-    value: "10.19.1.212"
-  - name: DB_PORT
-    value: "5432"
-  - name: DB_DATABASE
-    value: "directus"
-  - name: DB_USER
-    value: "directus"
-  - name: DB_PASSWORD 
-    valueFrom:
-      secretKeyRef:
-        name: directus-postgresql
-        key: password
-  - name: CACHE_ENABLED
-    value: "true"
-  - name: CACHE_TTL
-    value: "5m"
-  - name: CACHE_STORE
-    value: "redis"
-  - name: CACHE_REDIS_HOST
-    value: "10.19.1.213"
-  - name: CACHE_REDIS_PASSWORD
-    valueFrom:
-      secretKeyRef:
-        name: directus-redis
-        key: password
-
 # HPA
 autoscaling:
   enabled: false
@@ -81,6 +35,53 @@ autoscaling:
   maxReplicas: 100
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: 80
+
+# Service Config
+config:
+  application: # https://docs.directus.io/self-hosted/config-options.html#general
+    key: "6aeb8a0c-fdd5-4356-b5a8-c61fa83fc0ac"
+    secret: "4c28b02f-6c4c-4e8d-a40f-fa5a25f3d691"
+    public_url: https://cms.kolv.in
+    log_level: debug
+  auth:
+    sso: # https://docs.directus.io/self-hosted/config-options.html#sso-oauth2-and-openid
+      github:
+        enabled: true
+        allow_public_registrations: false
+        auth_url: https://github.com/login/oauth/authorize
+        access_url: https://github.com/login/oauth/access_token
+        profile_url: https://api.github.com/user
+        existingSecret: "directus-github-sso"
+        existingSecretClientId: client-id
+        existingSecretClientSecret: client-secret
+        default_role_id: b9cb9816-5f30-4423-9677-b257362b2a8c
+      discord:
+        enabled: false
+        allow_public_registrations: false
+        auth_url: https://discord.com/api/oauth2/authorize
+        access_url: https://discord.com/api/oauth2/token
+        profile_url: https://discord.com/api/users/@me
+        existingSecret: "directus-discord-sso"
+        existingSecretClientId: client-id
+        existingSecretClientSecret: client-secret
+        default_role_id: b9cb9816-5f30-4423-9677-b257362b2a8c
+    admin: # https://docs.directus.io/self-hosted/config-options.html#admin-account
+      enabled: false
+      existingSecret: "directus-admin-login"
+      existingSecretEmailKey: "email"
+      existingSecretPasswordKey: "password"
+  datastore:
+    enabled: true
+    client: "postgres"
+    host: "10.19.1.212"
+    port: "5432"
+    database: "directus"
+    user: "directus"
+  cache:
+    enabled: true
+    client: "redis"
+    host: "10.19.1.213"
+    ttl: "5m"
 
 # Service DB
 # https://docs.directus.io/self-hosted/config-options.html#database
