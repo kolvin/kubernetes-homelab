@@ -24,7 +24,6 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "directus.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -38,7 +37,62 @@ spec:
               containerPort: {{ .Values.service.port }}
               protocol: TCP
           env:
-            {{- toYaml .Values.directusEnvVars | nindent 12 }}
+            - name: CONFIG_PATH
+              value: /etc/{{ include "directus.fullname" . }}/config/config.yaml
+            {{- if .Values.config.datastore.enabled }}
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "directus.fullname" . }}-postgresql
+                  key: password
+            {{- end }}
+            {{- if .Values.config.cache.enabled }}
+            - name: CACHE_REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "directus.fullname" . }}-redis
+                  key: password
+            {{- end }}
+            {{- if .Values.config.auth.admin.enabled }}
+            - name: ADMIN_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.config.auth.admin.existingSecret }}
+                  key: {{ .Values.config.auth.admin.existingSecretEmailKey }}
+            - name: ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.config.auth.admin.existingSecret }}
+                  key: {{ .Values.config.auth.admin.existingSecretPasswordKey }}
+            {{- end }}
+            {{- if .Values.config.auth.sso.github.enabled }}
+            - name: AUTH_GITHUB_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.config.auth.sso.github.existingSecret }}
+                  key: {{ .Values.config.auth.sso.github.existingSecretClientId }}
+            - name: AUTH_GITHUB_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.config.auth.sso.github.existingSecret }}
+                  key: {{ .Values.config.auth.sso.github.existingSecretClientSecret }}
+            {{- end }}
+            {{- if .Values.config.auth.sso.discord.enabled }}
+            - name: AUTH_DISCORD_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.config.auth.sso.discord.existingSecret }}
+                  key: {{ .Values.config.auth.sso.discord.existingSecretClientId }}
+            - name: AUTH_DISCORD_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.config.auth.sso.discord.existingSecret }}
+                  key: {{ .Values.config.auth.sso.discord.existingSecretClientSecret }}
+            {{- end }}
+          volumeMounts:
+          - name: config
+            mountPath: /etc/{{ include "directus.fullname" . }}/config
+            readOnly: true
           livenessProbe:
             httpGet:
               path: /
@@ -49,6 +103,13 @@ spec:
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+      - name: config
+        configMap:
+          name: {{ include "directus.fullname" . }}-application-config
+          items:
+          - key: config.yaml
+            path: config.yaml
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

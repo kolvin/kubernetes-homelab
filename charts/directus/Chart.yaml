@@ -3,7 +3,20 @@ name: directus
 description: A Helm chart for deploying Directus Headless CMS to Kubernetes
 type: application
 version: 0.1.0
-
+appVersion: 9.23.4
+maintainers:
+  - name: Calvin Taylor
+    email: self@kolv.in
+sources:
+  - https://github.com/directus/docker
+  - https://hub.docker.com/r/directus/directus
+  - https://docs.directus.io/getting-started/introduction.html
+keywords:
+  - directus
+  - cms
+  - database
+  - headless
+  - api
 
 dependencies:
 - name: postgresql

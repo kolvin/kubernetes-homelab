@@ -50,13 +50,18 @@ app.kubernetes.io/name: {{ include "directus.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
-{{/*
-Create the name of the service account to use
-*/}}
-{{- define "directus.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create }}
-{{- default (include "directus.fullname" .) .Values.serviceAccount.name }}
-{{- else }}
-{{- default "default" .Values.serviceAccount.name }}
-{{- end }}
-{{- end }}
+# Directus Auth providers
+## add sso if enabled
+## add local if enabled
+{{- define "directus.authProviders" -}}
+{{- $directusAuthProviders := list -}}
+{{- if .Values.config.auth.admin.enabled -}}
+{{- $directusAuthProviders = append $directusAuthProviders "local" -}}
+{{- end -}}
+{{- range $k, $v := .Values.config.auth.sso -}}
+{{- if $v.enabled -}}
+{{- $directusAuthProviders = append $directusAuthProviders $k -}}
+{{- end -}}
+{{- end -}}
+{{- join "," $directusAuthProviders -}}
+{{- end -}}
