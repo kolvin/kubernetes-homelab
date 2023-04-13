@@ -65,3 +65,19 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 {{- join "," $directusAuthProviders -}}
 {{- end -}}
+
+# Directus Storage Locations
+## add local if enabled
+## add remote options if enabled
+{{- define "directus.storageLocations" -}}
+{{- $directusStorageLocations := list -}}
+{{- if .Values.config.storage.local.enabled -}}
+{{- $directusStorageLocations = append $directusStorageLocations "local" -}}
+{{- end -}}
+{{- range $k, $v := .Values.config.storage.remote -}}
+{{- if $v.enabled -}}
+{{- $directusStorageLocations = append $directusStorageLocations $k -}}
+{{- end -}}
+{{- end -}}
+{{- join "," $directusStorageLocations -}}
+{{- end -}}

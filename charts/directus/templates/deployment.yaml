@@ -93,6 +93,10 @@ spec:
           - name: config
             mountPath: /etc/{{ include "directus.fullname" . }}/config
             readOnly: true
+          {{- if .Values.config.storage.local.enabled }}
+          - name: app-local-storage
+            mountPath: {{ .Values.config.storage.local.root | quote }}
+          {{- end }}
           livenessProbe:
             httpGet:
               path: /
@@ -110,6 +114,9 @@ spec:
           items:
           - key: config.yaml
             path: config.yaml
+      - name: app-local-storage
+        persistentVolumeClaim:
+          claimName: {{ if .Values.config.storage.local.existingClaim }}{{ .Values.config.storage.local.existingClaim }}{{- else }}{{ template "directus.fullname" . }}-pvc{{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

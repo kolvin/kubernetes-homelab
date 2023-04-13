@@ -11,6 +11,13 @@ data:
     KEY: {{ .Values.config.application.key }}
     SECRET: {{ .Values.config.application.secret }}
     LOG_LEVEL: {{ .Values.config.application.log_level }}
+    # Storage
+    STORAGE_LOCATIONS: {{ include "directus.storageLocations" . | quote }}
+    {{- if .Values.config.storage.local.enabled }}
+    # Local Storage
+    STORAGE_LOCAL_DRIVER: "local"
+    STORAGE_LOCAL_ROOT: {{ .Values.config.storage.local.root | quote }}
+    {{- end }}
     # Authentication
     AUTH_PROVIDERS: {{ include "directus.authProviders" . | quote }}
     AUTH_DISABLE_DEFAULT: {{ ternary false true (.Values.config.auth.admin.enabled) }}

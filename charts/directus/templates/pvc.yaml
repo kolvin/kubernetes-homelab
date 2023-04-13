@@ -1,0 +1,15 @@
+{{- if .Values.config.storage.local.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "directus.fullname" . }}-pvc
+  labels:
+    {{- include "directus.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: {{ .Values.config.storage.local.storageClassName }}
+  resources:
+    requests:
+      storage: {{ .Values.config.storage.local.size }}
+{{- end }}
