@@ -13,7 +13,9 @@ fullnameOverride: ""
 resources: {}
 podAnnotations: {}
 podSecurityContext: {}
-securityContext: {}
+securityContext:
+  runAsUser: 1000
+  runAsGroup: 3000
 
 service:
   type: ClusterIP
@@ -43,6 +45,22 @@ config:
     secret: "4c28b02f-6c4c-4e8d-a40f-fa5a25f3d691"
     public_url: https://cms.kolv.in
     log_level: debug
+  storage:
+    remote:
+      s3:
+        enabled: false
+      gcs:
+        enabled: false
+      azure:
+        enabled: false
+      cloudinary:
+        enabled: false
+    local:
+      enabled: true
+      storageClassName: longhorn-fast
+      existingClaim: "directus-pvc"
+      size: 8Gi
+      root: /uploads
   auth:
     sso: # https://docs.directus.io/self-hosted/config-options.html#sso-oauth2-and-openid
       github:
