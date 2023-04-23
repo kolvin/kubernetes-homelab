@@ -18,6 +18,12 @@ data:
     STORAGE_LOCAL_DRIVER: "local"
     STORAGE_LOCAL_ROOT: {{ .Values.config.storage.local.root | quote }}
     {{- end }}
+    {{- if .Values.config.storage.remote.cloudinary.enabled }}
+    # Remote Storage
+    STORAGE_CLOUDINARY_DRIVER: "cloudinary"
+    STORAGE_CLOUDINARY_ROOT: {{ .Values.config.storage.remote.cloudinary.root | quote }}
+    STORAGE_CLOUDINARY_ACCESS_MODE: {{ .Values.config.storage.remote.cloudinary.access_mode | quote }}
+    {{- end }}
     # Authentication
     AUTH_PROVIDERS: {{ include "directus.authProviders" . | quote }}
     AUTH_DISABLE_DEFAULT: {{ ternary false true (.Values.config.auth.admin.enabled) }}
