@@ -44,7 +44,7 @@ config:
     key: "6aeb8a0c-fdd5-4356-b5a8-c61fa83fc0ac"
     secret: "4c28b02f-6c4c-4e8d-a40f-fa5a25f3d691"
     public_url: https://cms.kolv.in
-    log_level: debug
+    log_level: warn
   storage:
     remote:
       s3:
@@ -53,12 +53,18 @@ config:
         enabled: false
       azure:
         enabled: false
-      cloudinary:
-        enabled: false
+      cloudinary: # https://docs.directus.io/self-hosted/config-options.html#cloudinary-cloudinary
+        enabled: false # broken driver -> https://github.com/directus/directus/issues/18146
+        root: /directus
+        access_mode: public
+        existingSecret: "directus-cloudinary"
+        existingSecretCloudName: cloud_name
+        existingSecretApiKey: api_key
+        existingSecretApiSecret: api_secret
     local:
-      enabled: true
+      enabled: false # Inability to avoid using internal /asset endpoint -> https://github.com/directus/directus/discussions/7612
       storageClassName: longhorn-fast
-      existingClaim: "directus-pvc"
+      # existingClaim: "directus-pvc"
       size: 8Gi
       root: /uploads
   auth:

@@ -89,6 +89,23 @@ spec:
                   name: {{ .Values.config.auth.sso.discord.existingSecret }}
                   key: {{ .Values.config.auth.sso.discord.existingSecretClientSecret }}
             {{- end }}
+            {{- if .Values.config.storage.remote.cloudinary.enabled }}
+            - name: STORAGE_CLOUDINARY_CLOUD_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.config.storage.remote.cloudinary.existingSecret }}
+                  key: {{ .Values.config.storage.remote.cloudinary.existingSecretCloudName }}
+            - name: STORAGE_CLOUDINARY_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.config.storage.remote.cloudinary.existingSecret }}
+                  key: {{ .Values.config.storage.remote.cloudinary.existingSecretApiKey }}
+            - name: STORAGE_CLOUDINARY_API_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.config.storage.remote.cloudinary.existingSecret }}
+                  key: {{ .Values.config.storage.remote.cloudinary.existingSecretApiSecret }}
+            {{- end }}
           volumeMounts:
           - name: config
             mountPath: /etc/{{ include "directus.fullname" . }}/config
@@ -114,9 +131,11 @@ spec:
           items:
           - key: config.yaml
             path: config.yaml
+      {{- if .Values.config.storage.local.enabled }}
       - name: app-local-storage
         persistentVolumeClaim:
           claimName: {{ if .Values.config.storage.local.existingClaim }}{{ .Values.config.storage.local.existingClaim }}{{- else }}{{ template "directus.fullname" . }}-pvc{{- end }}
+      {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
